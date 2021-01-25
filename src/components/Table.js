@@ -8,7 +8,7 @@ const Table = () => {
     { title: 'Name', field: 'name' },
     { title: 'Username', field: 'username' }
   ]);
-  //eslint-disable-next-line
+
 
   const [data, setData] = useState([]);
 
@@ -28,6 +28,10 @@ const Table = () => {
       data={data}
       isLoading={data.length > 0 ? false : true}
       editable={{
+        onRowAdd: async (newData) => {
+          const newUser = await axios.post('https://jsonplaceholder.typicode.com/users', newData);
+          setData([...data, newUser.data]);
+        },
         onRowUpdate: async (newData, oldData) => {
           const updatedUser = await axios.put(`https://jsonplaceholder.typicode.com/users/${oldData.id}`, { name: newData.name, username: newData.username });
           console.log(updatedUser.data);
